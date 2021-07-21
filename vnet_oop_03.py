@@ -189,6 +189,7 @@ class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
         print(f"# {_etapa}a etapa: o chocolate!")
         print("#" + "-" * 79)
         self.__derreterChocolate()
+        print("#" + "-" * 79)
 
         # Proximas etapas do preparo, herdadas da classe base
         _etapa += 1
@@ -200,6 +201,68 @@ class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
         _somaPeso += self.getQtdeChocolate()
 
         return super().pesoTotalBolo() + _somaPeso
+
+
+class ReceitaDeBoloDeCenoura(ReceitaDeBolo):
+    """ Classe extendida para receitas de bolo de cenoura """
+    def __init__(self, qtdeFarinha:float, qtdeLeite:float, qtdeOvos:int, qtdeCenoura:float, pesoUnidOvo:float=50, tBaterOvos:int=30, tBaterMassa:int=30, tAssarBolo:int=30, tRalaCenoura:int=30) -> None:
+        """ Construtor da classe extendida """
+        super().__init__(qtdeFarinha, qtdeLeite, qtdeOvos, pesoUnidOvo, tBaterOvos, tBaterMassa, tAssarBolo)
+        self.__qtdeCenoura:float    = qtdeCenoura       # atributo privado
+        self.__tRalaCenoura:float   = tRalaCenoura      # atributo privado
+        # Atualiza tipo de bolo
+        self.setTipoBolo("Cenoura")
+
+    """ Metodos publicos Get/Set do atributo qtdeCenoura """
+    def getQtdeCenoura(self) -> float:
+        return self.__qtdeCenoura
+
+    def setQtdeCenoura(self, qtdeCenoura:float) -> None:
+        self.__qtdeCenoura = qtdeCenoura
+
+    """ Metodos publicos Get/Set do atributo tempo (s) para assar o bolo """
+    def getTRalaCenoura(self) -> int:
+        return self.__tRalaCenoura
+
+    def setTRalaCenoura(self, tRalaCenoura:int) -> None:
+        self.__tRalaCenoura = tRalaCenoura
+
+    """ Metodo privado que processa cenoura """
+    def __ralarCenoura(self) -> None:
+        print("Iniciando o processo de ralar a cenoura...")
+        tempo:int
+        for tempo in range(self.getTRalaCenoura(), 0, -1):
+            print(f"Faltam {tempo} seg. para terminar de ralar a cenoura...", end="\r")
+            sleep(1)    # considerando que o tempo informado esta em segundos
+        print("\nCenoura pronta para preparar o bolo!")
+
+    """ Metodo privado que formata o objeto como string """
+    def __str__(self) -> str:
+        objFormatado: str = ""
+        objFormatado += f"\n\tCenoura:   {self.getQtdeCenoura():.2f} g."
+
+        return super().__str__() + objFormatado
+
+    """ Metodo publico que prepara o bolo """
+    def prepararBolo(self) -> None:
+        # Etapa: bater os ovos
+        _etapa: int = 1
+        print(f"# {_etapa}a etapa: a cenoura!")
+        print("#" + "-" * 79)
+        self.__ralarCenoura()
+        print("#" + "-" * 79)
+
+        # Proximas etapas do preparo, herdadas da classe base
+        _etapa += 1
+        super().prepararBolo(_etapa)
+
+    """ Metodo publico que soma o peso total to bolo """
+    def pesoTotalBolo(self) -> float:
+        _somaPeso: float = 0.0
+        _somaPeso += self.getQtdeCenoura()
+
+        return super().pesoTotalBolo() + _somaPeso
+
 
 # -----------------------------------------------------------------------------
 # Script de tests....
@@ -263,15 +326,26 @@ def main():
                 objBolo = ReceitaDeBoloDeChocolate(qtdeFarinha,
                     qtdeLeite,
                     qtdeOvos,
-                    pesoOvos,
                     qtdeChocolate,
+                    pesoOvos,
                     tBaterOvos,
                     tBaterMassa,
                     tAssarBolo,
                     tDerreteChoc)
             elif (int(tipoBolo) == 3):
                 # Cenoura
-                pass
+                print("Esse bolo tem algo a mais...")
+                qtdeCenoura     = float(input("Cenoura (gramas): ") or "0.0")
+                tRalaCenoura    = int(input("Tempo para ralar a cenoura (segundos); padrao 30s: ") or "30")
+                objBolo = ReceitaDeBoloDeCenoura(qtdeFarinha,
+                    qtdeLeite,
+                    qtdeOvos,
+                    qtdeCenoura,
+                    pesoOvos,
+                    tBaterOvos,
+                    tBaterMassa,
+                    tAssarBolo,
+                    tRalaCenoura)
             else:
                 # Interrompe o looping
                 print("\nAte logo!\n")
