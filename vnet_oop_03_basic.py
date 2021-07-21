@@ -3,7 +3,7 @@
 import os
 from time import sleep
 
-class ReceitaDeBolo:
+class ReceitaDeBolo(object):
     """ Classe base para receitas de bolo """
     def __init__(self, qtdeOvos:int, tBaterOvos:int=30) -> None:
         """ Construtor da classe base """
