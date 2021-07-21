@@ -70,7 +70,7 @@ class ReceitaDeBolo:
         return self.__tAssarBolo
 
     def setTAssarBolo(self, tAssarBolo:int) -> None:
-        self.__tBaterMassa = tAssarBolo
+        self.__tAssarBolo = tAssarBolo
 
     """ Metodo privado que formata o objeto como string"""
     def __str__(self) -> str:
@@ -113,31 +113,33 @@ class ReceitaDeBolo:
         print("\nO bolo esta pronto!")
 
     """ Metodo publico que prepara o bolo """
-    def prepararBolo(self) -> None:
-        print("# Preparando o bolo!")
-        print("#" + "-" * 79)
-        # Primeira etapa: bater os ovos
-        print("# Primeira etapa: os ovos!")
+    def prepararBolo(self, etapa=1) -> None:
+        _etapa: int = etapa
+        # Etapa: bater os ovos
+        print(f"# {_etapa}a etapa: os ovos!")
         print("#" + "-" * 79)
         self.__baterOvos()
-        # Segunda etapa: misturar a massa
+        # Etapa: misturar a massa
+        _etapa += 1
         print("#" + "-" * 79)
-        print("# Terceira etapa: a massa!")
+        print(f"# {_etapa}a etapa: a massa!")
         print("#" + "-" * 79)
         self.__baterMassa()
-        # Terceira etapa: assar o bolo
+        # Etapa: assar o bolo
+        _etapa += 1
         print("#" + "-" * 79)
-        print("# Quarta etapa: o bolo!")
+        print(f"# {_etapa}a etapa: o bolo!")
         print("#" + "-" * 79)
         self.__assarMassa()
         print("\n")
 
 class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
     """ Classe extendida para receitas de bolo de chocolate """
-    def __init__(self, qtdeFarinha:float, qtdeLeite:float, qtdeOvos:int, qtdeChocolate:float, pesoUnidOvo:float=50, tBaterOvos:int=30, tBaterMassa:int=30, tAssarBolo:int=30) -> None:
+    def __init__(self, qtdeFarinha:float, qtdeLeite:float, qtdeOvos:int, qtdeChocolate:float, pesoUnidOvo:float=50, tBaterOvos:int=30, tBaterMassa:int=30, tAssarBolo:int=30, tDerreteChocolate:int=30) -> None:
         """ Construtor da classe extendida """
         super().__init__(qtdeFarinha, qtdeLeite, qtdeOvos, pesoUnidOvo, tBaterOvos, tBaterMassa, tAssarBolo)
-        self.__qtdeChocolate:float = qtdeChocolate   # atributo privado
+        self.__qtdeChocolate:float      = qtdeChocolate         # atributo privado
+        self.__tDerreteChocolate:float  = tDerreteChocolate     # atributo privado
         # Atualiza tipo de bolo
         self.setTipoBolo("Chocolate")
 
@@ -148,13 +150,38 @@ class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
     def setQtdeChocolate(self, qtdeChocolate:float) -> None:
         self.__qtdeChocolate = qtdeChocolate
 
-    """ Metodo privado que formata o objeto como string"""
+    """ Metodos publicos Get/Set do atributo tempo (s) para assar o bolo """
+    def getTDerreteChocolate(self) -> int:
+        return self.__tDerreteChocolate
+
+    def setTDerreteChocolate(self, tDerreteChocolate:int) -> None:
+        self.__tDerreteChocolate = tDerreteChocolate
+
+    """ Metodo privado que processa chocolate """
+    def __derreterChocolate(self) -> None:
+        print("Iniciando o processo de derreter o chocolate...")
+        tempo:int
+        for tempo in range(self.getTDerreteChocolate(), 0, -1):
+            print(f"Faltam {tempo} seg. para terminar de derreter o chocolate...", end="\r")
+            sleep(1)    # considerando que o tempo informado esta em segundos
+        print("Chocolate pronto para preparar o bolo!")
+
+    """ Metodo privado que formata o objeto como string """
     def __str__(self) -> str:
         objFormatado: str = ""
         objFormatado += f"\n\tChocolate: {self.getQtdeChocolate():.2f} g."
 
         return super().__str__() + objFormatado
 
+    """ Metodo publico que prepara o bolo """
+    def prepararBolo(self) -> None:
+        _etapa: int = 1
+        # Etapa: bater os ovos
+        print(f"# {_etapa}a etapa: o chocolate!")
+        print("#" + "-" * 79)
+        self.__derreterChocolate()
+        _etapa += 1
+        super().prepararBolo(_etapa)
 
 # -----------------------------------------------------------------------------
 # Script de tests....
@@ -162,20 +189,70 @@ class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
 def main():
     """ Funcao principal do script """
 
-    # Limpando a tela
-    os.system('cls' if os.name == 'nt' else 'clear')
+    #try:
+    while(True):
+        # Limpando a tela
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-    # Iniciando...
-    print("#" + "-" * 79)
-    print("# RECEITA DE BOLOS ")
-    print("#" + "-" * 79)
+        # Iniciando...
+        print("#" + "-" * 79)
+        print("# RECEITA DE BOLOS ")
+        print("#" + "-" * 79)
 
-    # Instanciando o primeiro objeto de bolo de chocolate
-    boloParaLancheDaTarde = ReceitaDeBoloDeChocolate(200.0, 1.0, 3, 100.0, tBaterOvos=10)
-    print(boloParaLancheDaTarde)
+        # Questiona o tipo de bolo
+        print("Qual bolo voce vai querer?")
+        print("\tPao de lo: 1")
+        print("\tChocolate: 2")
+        print("\tCenoura:   3")
+        print("Qualquer outra entrada encerra o programa.")
+        tipoBolo = int(input("Escolha: ") or "-1")
 
-    # Preparando o bolo...
-    boloParaLancheDaTarde.prepararBolo()
+        # Caso o usuario não entre com um numero
+        #if type(tipoBolo != int):
+        #    tipoBolo = -1
+        if tipoBolo in [1,2,3]:
+            # Recebe os ingredientes
+            print("Excelente escolha! Agora, os ingredientes...")
+            qtdeFarinha = float(input("Farinha (gramas): ") or "0.0")
+            qtdeLeite   = float(input("Leite (litros): ") or "0.0")
+            qtdeOvos    = int(input("Ovos (unidades): ") or "0")
+            pesoOvos    = float(input("Peso por ovo (gramas); padrao 50g: ") or "50.0")
+            print("Tudo bem. E o tempo de preparo?")
+            tBaterOvos      = int(input("Para bater os ovos (segundos); padrao 30s: ") or "30")
+            tBaterMassa     = int(input("Para misturar a massa (segundos); padrao 30s: ") or "30")
+            tAssarBolo      = int(input("Para assar o bolo (segundos); padrao 30s: ") or "30")
+
+        # Declara o objeto para receber a instancia
+        objBolo = None
+        # Instanciando o objeto de acordo com o bolo
+        if (int(tipoBolo) == 1):
+            # Pao de lo
+            objBolo = ReceitaDeBolo(qtdeFarinha, qtdeLeite, qtdeOvos, pesoOvos, tBaterOvos, tBaterMassa, tAssarBolo)
+        elif (int(tipoBolo) == 2):
+            # Chocolate
+            print("Esse bolo tem algo especial...")
+            qtdeChocolate = float(input("Chocolate (gramas): ") or "0.0")
+            tDerreteChoc  = int(input("Tempo para derreter o chocolate (segundos); padrao 30s: ") or "30")
+            objBolo = ReceitaDeBoloDeChocolate(qtdeFarinha, qtdeLeite, qtdeOvos, pesoOvos, qtdeChocolate, tBaterOvos, tBaterMassa, tAssarBolo, tDerreteChoc)
+        elif (int(tipoBolo) == 3):
+            # Cenoura
+            pass
+        else:
+            # Interrompe o looping
+            print("\nAte logo!\n")
+            break
+
+        if (objBolo != None):
+            # Exibe os ingredientes
+            print(objBolo)
+
+            # Preparando o bolo...
+            print("#" + "-" * 79)
+            print("# Preparando o bolo... ")
+            print("#" + "-" * 79)
+            objBolo.prepararBolo()
+    #except:
+    #    print("Ocorreu uma excecao!!!")
 
 if __name__ == "__main__":
     main()
