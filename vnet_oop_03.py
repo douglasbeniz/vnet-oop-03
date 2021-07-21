@@ -7,6 +7,7 @@ class ReceitaDeBolo:
     """ Classe base para receitas de bolo """
     def __init__(self, qtdeFarinha:float, qtdeLeite:float, qtdeOvos:int, pesoUnidOvo:float=50, tBaterOvos:int=30, tBaterMassa:int=30, tAssarBolo:int=30) -> None:
         """ Construtor da classe base """
+        self.__tipoBolo:str         = "Pao de lo"
         self.__qtdeFarinha:float    = qtdeFarinha   # atributo privado; quantidade de farinha; gramas
         self.__qtdeLeite:float      = qtdeLeite     # atributo privado; quantidade de leite; litros
         self.__qtdeOvos:int         = qtdeOvos      # atributo privado; quantidade de ovos; unidades
@@ -14,6 +15,13 @@ class ReceitaDeBolo:
         self.__tBaterOvos:int       = tBaterOvos    # atributo privado; tempo para bater os ovos; segundos
         self.__tBaterMassa:int      = tBaterMassa   # atributo privado; tempo para bater a massa; segundos
         self.__tAssarBolo:int       = tAssarBolo    # atributo privado; tempo para assar o bolo; segundos
+
+    """ Metodos publicos Get/Set do atributo tipo de bolo """
+    def getTipoBolo(self) -> str:
+        return self.__tipoBolo
+
+    def setTipoBolo(self, tipoBolo:str) -> None:
+        self.__tipoBolo = tipoBolo
 
     """ Metodos publicos Get/Set do atributo quantidade de farinha (g) da receita """
     def getQtdeFarinha(self) -> float:
@@ -63,6 +71,19 @@ class ReceitaDeBolo:
 
     def setTAssarBolo(self, tAssarBolo:int) -> None:
         self.__tBaterMassa = tAssarBolo
+
+    """ Metodo privado que formata o objeto como string"""
+    def __str__(self) -> str:
+        objFormatado: str = ""
+        objFormatado += "#" + "-" * 79
+        objFormatado += f"\n# Bolo do tipo: {self.getTipoBolo()}"
+        objFormatado += "\n#" + "-" * 79
+        objFormatado += f"\nIngredientes ::"
+        objFormatado += f"\n\tFarinha:   {self.getQtdeFarinha():.2f} g."
+        objFormatado += f"\n\tLeite:     {self.getQtdeLeite():.2f} L."
+        objFormatado += f"\n\tOvos:      {self.getQtdeOvos():d}"
+
+        return objFormatado
 
     """ Metodo privado que processa os ovos """
     def __baterOvos(self) -> None:
@@ -117,14 +138,22 @@ class ReceitaDeBoloDeChocolate(ReceitaDeBolo):
         """ Construtor da classe extendida """
         super().__init__(qtdeFarinha, qtdeLeite, qtdeOvos, pesoUnidOvo, tBaterOvos, tBaterMassa, tAssarBolo)
         self.__qtdeChocolate:float = qtdeChocolate   # atributo privado
+        # Atualiza tipo de bolo
+        self.setTipoBolo("Chocolate")
 
     """ Metodos publicos Get/Set do atributo qtdeChocolate """
     def getQtdeChocolate(self) -> float:
         return self.__qtdeChocolate
 
-    def setQtdeChocolate(self, qtdeFarinha:float) -> None:
-        self.__qtdeFarinha = qtdeFarinha
+    def setQtdeChocolate(self, qtdeChocolate:float) -> None:
+        self.__qtdeChocolate = qtdeChocolate
 
+    """ Metodo privado que formata o objeto como string"""
+    def __str__(self) -> str:
+        objFormatado: str = ""
+        objFormatado += f"\n\tChocolate: {self.getQtdeChocolate():.2f} g."
+
+        return super().__str__() + objFormatado
 
 
 # -----------------------------------------------------------------------------
@@ -143,7 +172,8 @@ def main():
 
     # Instanciando o primeiro objeto de bolo de chocolate
     boloParaLancheDaTarde = ReceitaDeBoloDeChocolate(200.0, 1.0, 3, 100.0, tBaterOvos=10)
-    #print(f"{boloParaLancheDaTarde.getQtdeFarinha():.2f}")
+    print(boloParaLancheDaTarde)
+
     # Preparando o bolo...
     boloParaLancheDaTarde.prepararBolo()
 
