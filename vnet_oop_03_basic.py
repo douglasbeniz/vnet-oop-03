@@ -7,9 +7,9 @@ class ReceitaDeBolo(object):
     """ Classe base para receitas de bolo """
     def __init__(self, qtdeOvos:int, tBaterOvos:int=30) -> None:
         """ Construtor da classe base """
-        self.__tipoBolo:str = "Pao de lo"
-        self.qtdeOvos:int   = qtdeOvos      # atributo privado; quantidade de ovos; unidades
-        self.tBaterOvos:int = tBaterOvos    # atributo privado; tempo para bater os ovos; segundos
+        self.__tipoBolo:str = "Pao de lo"   # atributo privado; tipo de bolo
+        self.qtdeOvos:int   = qtdeOvos      # atributo publico; quantidade de ovos; unidades
+        self.tBaterOvos:int = tBaterOvos    # atributo publico; tempo para bater os ovos; segundos
 
     """ Metodos publicos Get/Set do atributo tipo de bolo """
     def getTipoBolo(self) -> str:
@@ -43,8 +43,8 @@ class ReceitaDeBolo(object):
 
         return objFormatado
 
-    """ Metodo privado que processa os ovos """
     def __baterOvos(self) -> None:
+        """ Metodo privado que processa os ovos """
         print("Iniciando o processo de bater os ovos...")
         tempo:int
         for tempo in range(self.getTBaterOvos(), 0, -1):
@@ -174,76 +174,76 @@ class ReceitaDeBoloDeCenoura(ReceitaDeBolo):
 # -----------------------------------------------------------------------------
 def main():
     """ Funcao principal do script """
-    #try:
-    while(True):
-        # Limpando a tela
-        os.system('cls' if os.name == 'nt' else 'clear')
+    try:
+        while(True):
+            # Limpando a tela
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        # Iniciando...
-        print("#" + "-" * 79)
-        print("# RECEITA DE BOLOS ")
-        print("#" + "-" * 79)
-
-        # Questiona o tipo de bolo
-        print("Qual bolo voce vai querer?")
-        print("\tPao de lo: 1")
-        print("\tChocolate: 2")
-        print("\tCenoura:   3")
-        print("Qualquer outra entrada encerra o programa.")
-
-        tipoBolo:int = 0
-
-        try:
-            tipoBolo = int(input("Escolha: ") or "-1")
-        except ValueError:
-            tipoBolo = -1
-
-        # Caso o usuario não entre com um numero
-        if tipoBolo in [1,2,3]:
-            # Recebe os ingredientes
-            print("Excelente escolha! Agora, os ingredientes...")
-            qtdeOvos:int    = int(input("Ovos (unidades): ") or "0")
-            print("Tudo bem. E o tempo de preparo?")
-            tBaterOvos:int  = int(input("Para bater os ovos (segundos); padrao 30s: ") or "30")
-
-        # Declara o objeto para receber a instancia
-        objBolo = None
-        # Instanciando o objeto de acordo com o bolo
-        if (int(tipoBolo) == 1):
-            # Pao de lo
-            objBolo = ReceitaDeBolo(qtdeOvos, tBaterOvos)
-        elif (int(tipoBolo) == 2):
-            # Chocolate
-            print("Esse bolo tem algo especial...")
-            qtdeChocolate = float(input("Chocolate (gramas): ") or "0.0")
-            tDerreteChoc  = int(input("Tempo para derreter o chocolate (segundos); padrao 30s: ") or "30")
-            objBolo = ReceitaDeBoloDeChocolate(qtdeOvos, qtdeChocolate, tBaterOvos,tDerreteChoc)
-        elif (int(tipoBolo) == 3):
-            # Cenoura
-            print("Esse bolo tem algo a mais...")
-            qtdeCenoura     = float(input("Cenoura (gramas): ") or "0.0")
-            tRalaCenoura    = int(input("Tempo para ralar a cenoura (segundos); padrao 30s: ") or "30")
-            objBolo = ReceitaDeBoloDeCenoura(qtdeOvos, qtdeCenoura, tBaterOvos, tRalaCenoura)
-        else:
-            # Interrompe o looping
-            print("\nAte logo!\n")
-            break
-
-        if (objBolo != None):
-            # Exibe os ingredientes
-            print(objBolo)
-
-            # Preparando o bolo...
+            # Iniciando...
             print("#" + "-" * 79)
-            print("# Preparando o bolo... ")
+            print("# RECEITA DE BOLOS ")
             print("#" + "-" * 79)
-            objBolo.prepararBolo()
 
-        # Espera o usuario pressionar qualquer tecla antes de limpar a tela
-        #   e esperar pelo proximo bolo
-        input("Pressione <ENTER> para prosseguir...")
-    #except:
-    #    print("Ocorreu uma excecao!!!")
+            # Questiona o tipo de bolo
+            print("Qual bolo voce vai querer?")
+            print("\tPao de lo: 1")
+            print("\tChocolate: 2")
+            print("\tCenoura:   3")
+            print("Qualquer outra entrada encerra o programa.")
+
+            tipoBolo:int = 0
+
+            try:
+                tipoBolo = int(input("Escolha: ") or "-1")
+            except ValueError:
+                tipoBolo = -1
+
+            # Caso o usuario não entre com um numero
+            if tipoBolo in [1,2,3]:
+                # Recebe os ingredientes
+                print("Excelente escolha! Agora, os ingredientes...")
+                qtdeOvos:int    = int(input("Ovos (unidades): ") or "0")
+                print("Tudo bem. E o tempo de preparo?")
+                tBaterOvos:int  = int(input("Para bater os ovos (segundos); padrao 30s: ") or "30")
+
+            # Declara o objeto para receber a instancia
+            objBolo = None
+            # Instanciando o objeto de acordo com o bolo
+            if (int(tipoBolo) == 1):
+                # Pao de lo
+                objBolo = ReceitaDeBolo(qtdeOvos, tBaterOvos)
+            elif (int(tipoBolo) == 2):
+                # Chocolate
+                print("Esse bolo tem algo especial...")
+                qtdeChocolate = float(input("Chocolate (gramas): ") or "0.0")
+                tDerreteChoc  = int(input("Tempo para derreter o chocolate (segundos); padrao 30s: ") or "30")
+                objBolo = ReceitaDeBoloDeChocolate(qtdeOvos, qtdeChocolate, tBaterOvos,tDerreteChoc)
+            elif (int(tipoBolo) == 3):
+                # Cenoura
+                print("Esse bolo tem algo a mais...")
+                qtdeCenoura     = float(input("Cenoura (gramas): ") or "0.0")
+                tRalaCenoura    = int(input("Tempo para ralar a cenoura (segundos); padrao 30s: ") or "30")
+                objBolo = ReceitaDeBoloDeCenoura(qtdeOvos, qtdeCenoura, tBaterOvos, tRalaCenoura)
+            else:
+                # Interrompe o looping
+                print("\nAte logo!\n")
+                break
+
+            if (objBolo != None):
+                # Exibe os ingredientes
+                print(objBolo)
+
+                # Preparando o bolo...
+                print("#" + "-" * 79)
+                print("# Preparando o bolo... ")
+                print("#" + "-" * 79)
+                objBolo.prepararBolo()
+
+            # Espera o usuario pressionar qualquer tecla antes de limpar a tela
+            #   e esperar pelo proximo bolo
+            input("Pressione <ENTER> para prosseguir...")
+    except:
+        print("Ocorreu uma excecao!!!")
 
 if __name__ == "__main__":
     main()
